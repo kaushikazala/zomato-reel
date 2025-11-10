@@ -1,0 +1,24 @@
+const express = require("express");
+const foodController = require("../controllers/food.controller");
+const authMiddleware = require("../middlewares/auth.middlewares");
+const router = express.Router();
+const multer = require("multer");
+const upload = multer({
+  storage: multer.memoryStorage()
+});  
+
+//POST /api/food/  only for food partners to add new food items
+router.post(
+  "/",
+  authMiddleware.authFoodPartnerMiddleware,
+  upload.single("video"), // both file name and field name should be same("video")
+  foodController.createFoodItem
+);
+ 
+//GET /api/food/  for users 
+router.get("/",
+  authMiddleware.authUserMiddleware,
+  foodController.getFoodItems
+);
+
+module.exports = router;
