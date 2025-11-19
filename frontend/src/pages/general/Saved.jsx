@@ -75,7 +75,7 @@ const Saved = () => {
         setIsLoading(true)
         setError(null)
         const response = await axios.get(
-          'http://localhost:8080/api/food/save',
+          '/api/food/save',
           { withCredentials: true }
         )
         setSavedVideos(response.data.savedFood || [])
@@ -109,7 +109,7 @@ const Saved = () => {
 
       // API call
       const response = await axios.post(
-        'http://localhost:8080/api/food/like',
+        '/api/food/like',
         { foodId: videoId },
         { withCredentials: true }
       )
@@ -150,7 +150,7 @@ const Saved = () => {
 
       // API call - remove bookmark
       const response = await axios.post(
-        'http://localhost:8080/api/food/save',
+        '/api/food/save',
         { foodId: videoId },
         { withCredentials: true }
       )
@@ -171,7 +171,7 @@ const Saved = () => {
       // Revert optimistic update on error - refetch list
       try {
         const response = await axios.get(
-          'http://localhost:8080/api/food/save',
+          '/api/food/save',
           { withCredentials: true }
         )
         setSavedVideos(response.data.savedFood || [])

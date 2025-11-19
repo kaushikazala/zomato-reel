@@ -18,7 +18,7 @@ const UserRegister = () => {
     const password = formData.get('password');
     const agreeToTerms = formData.get('agreeToTerms') === 'on';
 
-   const response = await axios.post('http://localhost:8080/api/auth/user/register', {
+   const response = await axios.post('/api/auth/user/register', {
       fullName,
       email,
       password,

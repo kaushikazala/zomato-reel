@@ -71,7 +71,7 @@ const HomeGeneral = () => {
     const fetchVideos = async () => {
       try {
         setLoading(true)
-        const response = await axios.get('http://localhost:8080/api/food', { 
+        const response = await axios.get('/api/food', { 
           withCredentials: true 
         })
         setVideos(response.data.foodItems || [])
@@ -103,7 +103,7 @@ const HomeGeneral = () => {
 
       // API call
       const response = await axios.post(
-        'http://localhost:8080/api/food/like',
+        '/api/food/like',
         { foodId: videoId },
         { withCredentials: true }
       )
@@ -151,7 +151,7 @@ const HomeGeneral = () => {
 
       // API call
       const response = await axios.post(
-        'http://localhost:8080/api/food/save',
+        '/api/food/save',
         { foodId: videoId },
         { withCredentials: true }
       )

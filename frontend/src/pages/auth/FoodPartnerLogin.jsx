@@ -15,7 +15,7 @@ const FoodPartnerLogin = () => {
     const password = formData.get('password');  
     const rememberMe = formData.get('rememberMe') === 'on';
 
-    const response = await axios.post('http://localhost:8080/api/auth/food-partner/login', {
+    const response = await axios.post('/api/auth/food-partner/login', {
       email,
       password,
       rememberMe

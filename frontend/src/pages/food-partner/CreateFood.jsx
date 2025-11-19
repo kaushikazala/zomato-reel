@@ -78,7 +78,7 @@ const CreateFood = () => {
       formDataToSend.append('name', formData.name)
       formDataToSend.append('description', formData.description)
 
-        await axios.post('http://localhost:8080/api/food', formDataToSend,{withCredentials:true}, {
+        await axios.post('/api/food', formDataToSend,{withCredentials:true}, {
       })
       setSuccess('Food created successfully!')
       navigate("/")

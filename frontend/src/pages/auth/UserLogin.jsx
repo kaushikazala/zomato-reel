@@ -15,7 +15,7 @@ const UserLogin = () => {
     const password = formData.get('password');
     const rememberMe = formData.get('rememberMe') === 'on';
 
-    const response = await axios.post('http://localhost:8080/api/auth/user/login', {
+    const response = await axios.post('/api/auth/user/login', {
       email,
       password,
       rememberMe
