@@ -26,7 +26,11 @@ async function registerUser(req,res) {
     const token = jwt.sign({
         id:user._id,
     },process.env.JWT_SECRET)
-    res.cookie("token",token)
+    res.cookie("token",token,{
+    httpOnly: true,
+    secure: false,
+    sameSite: "lax"
+})
     res.status(201).json({
         message:"user registered successfully",
         user:{
@@ -60,7 +64,11 @@ async function loginUser(req,res) {
     const token = jwt.sign({
         id:user._id,
     },process.env.JWT_SECRET)
-    res.cookie("token",token)
+    res.cookie("token",token,{
+    httpOnly: true,
+    secure: false,
+    sameSite: "lax"
+})
     res.status(200).json({
         message:"user logged in successfully",
         user:{
@@ -79,7 +87,7 @@ async function logoutUser(req,res) {
 }
 
 async function registerFoodPartner(req,res) {
-    const {name,email,password} = req.body
+    const { businessName, ownerName, businessType, email, phone, address, password, agreeToTerms} = req.body
 
     const isFoodPartnerAllreadyExists = await foodPartnerModel.findOne({
         email
@@ -92,9 +100,14 @@ async function registerFoodPartner(req,res) {
     }
     const hashedPassword =  await bcrypt.hash(password,10)
     const foodPartner = await foodPartnerModel.create({
-        name,
-        email,
-        password:hashedPassword
+       businessName,
+      ownerName,
+      businessType,
+      email,
+      phone,
+      address,
+      password: hashedPassword,
+      agreeToTerms,
     })
 
     const token = jwt.sign({
@@ -104,9 +117,14 @@ async function registerFoodPartner(req,res) {
     res.status(201).json({
         message:"food partner registered successfully",
         foodPartner:{
-            _id:foodPartner._id,
-            email:foodPartner.email,
-            name:foodPartner.name
+           _id: foodPartner._id,
+        businessName: foodPartner.businessName,
+        ownerName: foodPartner.ownerName,
+        businessType: foodPartner.businessType,
+        email: foodPartner.email,
+        phone: foodPartner.phone,
+        address: foodPartner.address,
+        agreeToTerms: foodPartner.agreeToTerms,
         }
     })
 }

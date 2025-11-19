@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken')
 
 async function authFoodPartnerMiddleware(req,res,next) {
      const token = req.cookies.token;
+ 
      if(!token){
             return res.status(401).json({
                 message: "Unauthorized access"
@@ -30,6 +31,7 @@ async function authFoodPartnerMiddleware(req,res,next) {
 
 async function authUserMiddleware(req,res,next) {
     const token = req.cookies.token;
+    // console.log("Auth User Middleware Token:", token);
     if(!token){
            return res.status(401).json({
                message: "Unauthorized access"
