@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { eventNames } = require("../app");
 
 const userSchema = new mongoose.Schema(
   {
@@ -9,7 +8,7 @@ const userSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      require: true,
+      required: true,
       unique: true,
     },
     password: {

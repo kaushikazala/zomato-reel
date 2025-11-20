@@ -18,7 +18,7 @@ app.use(express.json());
 
 
 app.get("/", (req, res) => {
-    res.send("Welcome to the Food Delivery App API");
+    res.send("Welcome to the Food Delivery API");
 });
 
 app.use("/api/auth", authRoutes);

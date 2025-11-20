@@ -4,6 +4,8 @@ const connectDB = require('./src/db/db')
 
 connectDB()
 
-app.listen(8080,()=>{
-    console.log("server is running on port 8080")
+app.listen( process.env.PORT,()=>{
+    
+    console.log(`server is running on port ${process.env.PORT}`)
 })
+

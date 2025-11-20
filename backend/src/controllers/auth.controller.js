@@ -113,7 +113,11 @@ async function registerFoodPartner(req,res) {
     const token = jwt.sign({
         id:foodPartner._id,
     },process.env.JWT_SECRET)
-    res.cookie("token",token)
+    res.cookie("token",token,{
+    httpOnly: true,
+    secure: false,
+    sameSite: "lax"
+})
     res.status(201).json({
         message:"food partner registered successfully",
         foodPartner:{
@@ -151,7 +155,11 @@ async function loginFoodPartner(req,res) {
     const token = jwt.sign({
         id:foodPartner._id,
     },process.env.JWT_SECRET)
-    res.cookie("token",token)
+    res.cookie("token",token,{
+    httpOnly: true,
+    secure: false,
+    sameSite: "lax"
+})
     res.status(200).json({
         message:"food partner logged in successfully",
         foodPartner:{
