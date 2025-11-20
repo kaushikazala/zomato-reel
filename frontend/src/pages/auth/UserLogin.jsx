@@ -25,7 +25,7 @@ const UserLogin = () => {
     },{
       withCredentials:true 
     })
-    
+    console.log(response);
     navigate("/home");
   }
   return (
