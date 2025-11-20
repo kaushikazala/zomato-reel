@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import '../../styles/auth.css'
+import '../../styles/chooseRegister.css'
+
 
 const ChooseRegister = () => {
   return (
@@ -22,7 +23,7 @@ const ChooseRegister = () => {
                 Register as User
               </Link>
               <Link to="/user/login" className="btn btn-secondary">
-                Sign In
+                Login In
               </Link>
             </div>
           </div>
@@ -37,7 +38,7 @@ const ChooseRegister = () => {
                 Register as Partner
               </Link>
               <Link to="/food-partner/login" className="btn btn-secondary">
-                Sign In
+                Login In
               </Link>
             </div>
           </div>

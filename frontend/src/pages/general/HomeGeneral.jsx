@@ -3,6 +3,7 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 import BottomNavigation from '../../components/BottomNavigation'
 import '../../styles/reels.css'
+const API = import.meta.env.API_URL 
 
 const HomeGeneral = () => {
   const containerRef = useRef(null)
@@ -17,9 +18,9 @@ const HomeGeneral = () => {
       if (!initialInteractions[video._id]) {
         initialInteractions[video._id] = {
           liked: video.isLiked || false,
-          likes: video.likesCount || 0,
-          bookmarked: video.isSaved || false,
-          bookmarks: video.savesCount || 0,
+          likes: video.likes || 0,
+          bookmarked: video.isBookmarked || false,
+          bookmarks: video.bookmarks || 0,
           showComments: false
         }
       }
@@ -71,7 +72,7 @@ const HomeGeneral = () => {
     const fetchVideos = async () => {
       try {
         setLoading(true)
-        const response = await axios.get('/api/food', { 
+        const response = await axios.get(`${API}/api/food`, { 
           withCredentials: true 
         })
         setVideos(response.data.foodItems || [])
@@ -88,23 +89,22 @@ const HomeGeneral = () => {
   // Toggle like
   const toggleLike = async (videoId) => {
     try {
-      const currentLiked = interactions[videoId]?.liked
-      const currentLikes = interactions[videoId]?.likes || 0
+      const currentState = interactions[videoId]?.liked
       
       // Optimistic update
       setInteractions(prev => ({
         ...prev,
         [videoId]: {
           ...prev[videoId],
-          liked: !currentLiked,
-          likes: !currentLiked ? currentLikes + 1 : currentLikes - 1
+          liked: !prev[videoId].liked,
+          likes: prev[videoId].liked ? prev[videoId].likes - 1 : prev[videoId].likes + 1
         }
       }))
 
-      // API call
+      // API call - adjust endpoint based on your backend structure
       const response = await axios.post(
-        '/api/food/like',
-        { foodId: videoId },
+        `${API}/api/food/${videoId}/like`,
+        { liked: !currentState },
         { withCredentials: true }
       )
 
@@ -114,8 +114,8 @@ const HomeGeneral = () => {
           ...prev,
           [videoId]: {
             ...prev[videoId],
-            liked: response.data.isLiked,
-            likes: response.data.likesCount || 0
+            liked: response.data.isLiked !== undefined ? response.data.isLiked : !currentState,
+            likes: response.data.likes || prev[videoId].likes
           }
         }))
       }
@@ -126,7 +126,7 @@ const HomeGeneral = () => {
         ...prev,
         [videoId]: {
           ...prev[videoId],
-          liked: !interactions[videoId]?.liked,
+          liked: interactions[videoId]?.liked,
           likes: interactions[videoId]?.likes || 0
         }
       }))
@@ -136,23 +136,22 @@ const HomeGeneral = () => {
   // Toggle bookmark (saved)
   const toggleBookmark = async (videoId) => {
     try {
-      const currentBookmarked = interactions[videoId]?.bookmarked
-      const currentBookmarks = interactions[videoId]?.bookmarks || 0
+      const currentState = interactions[videoId]?.bookmarked
       
       // Optimistic update
       setInteractions(prev => ({
         ...prev,
         [videoId]: {
           ...prev[videoId],
-          bookmarked: !currentBookmarked,
-          bookmarks: !currentBookmarked ? currentBookmarks + 1 : currentBookmarks - 1
+          bookmarked: !prev[videoId].bookmarked,
+          bookmarks: prev[videoId].bookmarked ? prev[videoId].bookmarks - 1 : prev[videoId].bookmarks + 1
         }
       }))
 
-      // API call
+      // API call - adjust endpoint based on your backend structure
       const response = await axios.post(
-        '/api/food/save',
-        { foodId: videoId },
+        `${API}/api/food/${videoId}/bookmark`,
+        { bookmarked: !currentState },
         { withCredentials: true }
       )
 
@@ -162,8 +161,8 @@ const HomeGeneral = () => {
           ...prev,
           [videoId]: {
             ...prev[videoId],
-            bookmarked: response.data.isSaved,
-            bookmarks: response.data.savesCount || 0
+            bookmarked: response.data.isBookmarked !== undefined ? response.data.isBookmarked : !currentState,
+            bookmarks: response.data.bookmarks || prev[videoId].bookmarks
           }
         }))
       }
@@ -174,7 +173,7 @@ const HomeGeneral = () => {
         ...prev,
         [videoId]: {
           ...prev[videoId],
-          bookmarked: !interactions[videoId]?.bookmarked,
+          bookmarked: interactions[videoId]?.bookmarked,
           bookmarks: interactions[videoId]?.bookmarks || 0
         }
       }))

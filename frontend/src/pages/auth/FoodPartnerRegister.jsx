@@ -4,8 +4,11 @@ import '../../styles/auth.css'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
+const API = import.meta.env.API_URL
+
 const FoodPartnerRegister = () => {
   const navigate = useNavigate();
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
      const formData = new FormData(e.target);
@@ -19,7 +22,7 @@ const FoodPartnerRegister = () => {
     const password = formData.get('password');
     const agreeToTerms = formData.get('agreeToTerms') === 'on';
 
-    const response = await axios.post('http://localhost:3000/api/auth/food-partner/register', {
+    const response = await axios.post(`${API}/api/auth/food-partner/register`, {
       businessName,
       ownerName,
       email,
@@ -147,8 +150,8 @@ const FoodPartnerRegister = () => {
               type="checkbox"
               id="agreeToTerms"
               name="agreeToTerms"
-              checked={FoodPartnerRegister.agreeToTerms}
-            
+              checked={agreeToTerms}
+              onChange={(e) => setAgreeToTerms(e.target.checked)}
             />
             <label htmlFor="agreeToTerms">
               I agree to the <a href="#" style={{ color: 'var(--primary-color)' }}>Terms and Conditions</a>

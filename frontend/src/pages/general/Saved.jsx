@@ -3,6 +3,7 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 import BottomNavigation from '../../components/BottomNavigation'
 import '../../styles/saved.css'
+const API = import.meta.env.API_URL
 
 const Saved = () => {
   const containerRef = useRef(null)
@@ -11,17 +12,17 @@ const Saved = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  // Initialize interactions state
+  // Initialize interactions state (handle saved entry shape: { food })
   useEffect(() => {
     const initialInteractions = {}
-    savedVideos.forEach(item => {
-      const video = item.food
-      if (!initialInteractions[video._id]) {
-        initialInteractions[video._id] = {
-          liked: video.isLiked || false,
-          likes: video.likesCount || 0,
-          bookmarked: video.isSaved || true,
-          bookmarks: video.savesCount || 0,
+    savedVideos.forEach(entry => {
+      const item = entry.food || entry
+      if (!initialInteractions[item._id]) {
+        initialInteractions[item._id] = {
+          liked: item.isLiked || false,
+          likes: item.likesCount || item.likes || 0,
+          bookmarked: true,
+          bookmarks: item.savesCount || item.bookmarks || 0,
           showComments: false
         }
       }
@@ -74,10 +75,7 @@ const Saved = () => {
       try {
         setIsLoading(true)
         setError(null)
-        const response = await axios.get(
-          '/api/food/save',
-          { withCredentials: true }
-        )
+        const response = await axios.get(`${API}/food/save`)
         setSavedVideos(response.data.savedFood || [])
       } catch (err) {
         console.error('Error fetching saved videos:', err)
@@ -94,25 +92,20 @@ const Saved = () => {
   // Toggle like
   const toggleLike = async (videoId) => {
     try {
-      const currentLiked = interactions[videoId]?.liked
-      const currentLikes = interactions[videoId]?.likes || 0
-      
+      const currentState = interactions[videoId]?.liked
+
       // Optimistic update
       setInteractions(prev => ({
         ...prev,
         [videoId]: {
           ...prev[videoId],
-          liked: !currentLiked,
-          likes: !currentLiked ? currentLikes + 1 : currentLikes - 1
+          liked: !prev[videoId].liked,
+          likes: prev[videoId].liked ? prev[videoId].likes - 1 : prev[videoId].likes + 1
         }
       }))
 
       // API call
-      const response = await axios.post(
-        '/api/food/like',
-        { foodId: videoId },
-        { withCredentials: true }
-      )
+      const response = await api.post(`${API}/food/like`, { foodId: videoId })
 
       // Update with actual data from backend
       if (response.data) {
@@ -120,8 +113,8 @@ const Saved = () => {
           ...prev,
           [videoId]: {
             ...prev[videoId],
-            liked: response.data.isLiked,
-            likes: response.data.likesCount || 0
+            liked: response.data.isLiked !== undefined ? response.data.isLiked : !currentState,
+            likes: response.data.likesCount || prev[videoId].likes
           }
         }))
       }
@@ -132,7 +125,7 @@ const Saved = () => {
         ...prev,
         [videoId]: {
           ...prev[videoId],
-          liked: !interactions[videoId]?.liked,
+          liked: interactions[videoId]?.liked,
           likes: interactions[videoId]?.likes || 0
         }
       }))
@@ -142,38 +135,28 @@ const Saved = () => {
   // Toggle bookmark (remove from saved)
   const toggleBookmark = async (videoId) => {
     try {
-      const currentBookmarked = interactions[videoId]?.bookmarked
-      const currentBookmarks = interactions[videoId]?.bookmarks || 0
-      
-      // Optimistic update - remove from list
-      setSavedVideos(prev => prev.filter(item => item.food._id !== videoId))
+      // Optimistic update - remove from list (saved entry may be { food })
+      setSavedVideos(prev => prev.filter(video => {
+        const id = video.food ? video.food._id : video._id
+        return id !== videoId
+      }))
 
-      // API call - remove bookmark
-      const response = await axios.post(
-        '/api/food/save',
-        { foodId: videoId },
-        { withCredentials: true }
-      )
-
-      // Update interactions state
-      if (response.data) {
-        setInteractions(prev => ({
-          ...prev,
-          [videoId]: {
-            ...prev[videoId],
-            bookmarked: response.data.isSaved,
-            bookmarks: response.data.savesCount || 0
-          }
-        }))
+      // API call - toggle save
+      const res = await api.post(`${API}/food/save`, { foodId: videoId })
+      // If backend responds that it's still saved, re-fetch to be consistent
+      if (res && res.data && res.data.isSaved) {
+        try {
+          const response = await api.get(`${API}/food/save`)
+          setSavedVideos(response.data.savedFood || [])
+        } catch (fetchErr) {
+          console.error('Error refetching saved videos:', fetchErr)
+        }
       }
     } catch (err) {
       console.error('Error toggling bookmark:', err)
       // Revert optimistic update on error - refetch list
       try {
-        const response = await axios.get(
-          '/api/food/save',
-          { withCredentials: true }
-        )
+        const response = await api.get(`${API}/food/save`)
         setSavedVideos(response.data.savedFood || [])
       } catch (fetchErr) {
         console.error('Error refetching saved videos:', fetchErr)
@@ -252,9 +235,7 @@ const Saved = () => {
         </div>
 
         <div className="saved-container" ref={containerRef}>
-          {savedVideos.map((item) => {
-            const r = item.food
-            return (
+          {savedVideos.map((r) => (
             <div className="reel" key={r._id}>
               <video
                 src={r.video}
@@ -315,8 +296,7 @@ const Saved = () => {
                 </div>
               </div>
             </div>
-            )
-          })}
+          ))}
         </div>
       </div>
 

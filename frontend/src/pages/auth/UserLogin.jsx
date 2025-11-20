@@ -4,6 +4,8 @@ import '../../styles/auth.css'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 
+const API = import.meta.env.API_URL
+
 const UserLogin = () => {
 
   const navigate = useNavigate();
@@ -15,7 +17,7 @@ const UserLogin = () => {
     const password = formData.get('password');
     const rememberMe = formData.get('rememberMe') === 'on';
 
-    const response = await axios.post('/api/auth/user/login', {
+    const response = await axios.post(`${API}/api/auth/user/login`, {
       email,
       password,
       rememberMe
@@ -23,7 +25,7 @@ const UserLogin = () => {
       withCredentials:true 
     })
     
-    navigate("/");
+    navigate("/home");
   }
   return (
     <div className="auth-container">

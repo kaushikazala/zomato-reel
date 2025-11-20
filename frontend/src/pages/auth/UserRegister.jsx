@@ -1,11 +1,14 @@
-import React, { use, useState } from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import '../../styles/auth.css'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 
+const API = import.meta.env.API_URL
+
 const UserRegister = () => {
   const navigate = useNavigate();
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
 
  const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,7 +21,7 @@ const UserRegister = () => {
     const password = formData.get('password');
     const agreeToTerms = formData.get('agreeToTerms') === 'on';
 
-   const response = await axios.post('/api/auth/user/register', {
+   const response = await axios.post(`${API}/api/auth/user/register`, {
       fullName,
       email,
       password,
@@ -99,7 +102,8 @@ const UserRegister = () => {
               type="checkbox"
               id="agreeToTerms"
               name="agreeToTerms"
-              checked={UserRegister.agreeToTerms}
+              checked={agreeToTerms}
+              onChange={(e) => setAgreeToTerms(e.target.checked)}
               required
             />
             <label htmlFor="agreeToTerms">

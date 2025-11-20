@@ -4,6 +4,8 @@ import '../../styles/auth.css'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 
+const API = import.meta.env.API_URL
+
 const FoodPartnerLogin = () => {
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
@@ -15,7 +17,7 @@ const FoodPartnerLogin = () => {
     const password = formData.get('password');  
     const rememberMe = formData.get('rememberMe') === 'on';
 
-    const response = await axios.post('/api/auth/food-partner/login', {
+    const response = await axios.post(`${API}/api/auth/food-partner/login`, {
       email,
       password,
       rememberMe
