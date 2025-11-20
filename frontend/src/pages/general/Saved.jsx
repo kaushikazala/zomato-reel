@@ -76,7 +76,7 @@ const Saved = () => {
       try {
         setIsLoading(true)
         setError(null)
-        const response = await axios.get(`${API}/food/save`)
+        const response = await axios.get(`${API_URL}/food/save`)
         setSavedVideos(response.data.savedFood || [])
       } catch (err) {
         console.error('Error fetching saved videos:', err)
