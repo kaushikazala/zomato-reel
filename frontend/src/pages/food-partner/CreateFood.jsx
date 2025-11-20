@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import './create-food.css'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { API_URL } from '../../App'
 
 const API = import.meta.env.API_URL
 
@@ -77,7 +78,7 @@ const CreateFood = () => {
       formDataToSend.append('name', formData.name)
       formDataToSend.append('description', formData.description)
 
-      await axios.post(`${API}/api/food`, formDataToSend, {withCredentials:true})
+      await axios.post(`${API_URL}/api/food`, formDataToSend, {withCredentials:true})
       setSuccess('Food created successfully!')
       navigate("/")
       // const response = await fetch('/api/food/create', {

@@ -3,7 +3,8 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 import BottomNavigation from '../../components/BottomNavigation'
 import '../../styles/saved.css'
-const API = import.meta.env.API_URL
+import { API_URL } from '../../App'
+
 
 const Saved = () => {
   const containerRef = useRef(null)
@@ -105,7 +106,7 @@ const Saved = () => {
       }))
 
       // API call
-      const response = await api.post(`${API}/food/like`, { foodId: videoId })
+      const response = await axios.post(`${API_URL}/food/like`, { foodId: videoId })
 
       // Update with actual data from backend
       if (response.data) {
@@ -142,11 +143,11 @@ const Saved = () => {
       }))
 
       // API call - toggle save
-      const res = await api.post(`${API}/food/save`, { foodId: videoId })
+      const res = await axios.post(`${API_URL}/food/save`, { foodId: videoId })
       // If backend responds that it's still saved, re-fetch to be consistent
       if (res && res.data && res.data.isSaved) {
         try {
-          const response = await api.get(`${API}/food/save`)
+          const response = await axios.get(`${API_URL}/food/save`)
           setSavedVideos(response.data.savedFood || [])
         } catch (fetchErr) {
           console.error('Error refetching saved videos:', fetchErr)
@@ -156,7 +157,7 @@ const Saved = () => {
       console.error('Error toggling bookmark:', err)
       // Revert optimistic update on error - refetch list
       try {
-        const response = await api.get(`${API}/food/save`)
+        const response = await axios.get(`${API_URL}/food/save`)
         setSavedVideos(response.data.savedFood || [])
       } catch (fetchErr) {
         console.error('Error refetching saved videos:', fetchErr)

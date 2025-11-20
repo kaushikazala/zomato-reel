@@ -3,7 +3,8 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 import BottomNavigation from '../../components/BottomNavigation'
 import '../../styles/reels.css'
-const API = import.meta.env.API_URL 
+import { API_URL } from '../../App'
+
 
 const HomeGeneral = () => {
   const containerRef = useRef(null)
@@ -72,7 +73,7 @@ const HomeGeneral = () => {
     const fetchVideos = async () => {
       try {
         setLoading(true)
-        const response = await axios.get(`${API}/api/food`, { 
+        const response = await axios.get(`${API_URL}/api/food`, { 
           withCredentials: true 
         })
         setVideos(response.data.foodItems || [])
@@ -103,7 +104,7 @@ const HomeGeneral = () => {
 
       // API call - adjust endpoint based on your backend structure
       const response = await axios.post(
-        `${API}/api/food/${videoId}/like`,
+        `${API_URL}/api/food/${videoId}/like`,
         { liked: !currentState },
         { withCredentials: true }
       )
@@ -150,7 +151,7 @@ const HomeGeneral = () => {
 
       // API call - adjust endpoint based on your backend structure
       const response = await axios.post(
-        `${API}/api/food/${videoId}/bookmark`,
+        `${API_URL}/api/food/${videoId}/bookmark`,
         { bookmarked: !currentState },
         { withCredentials: true }
       )
