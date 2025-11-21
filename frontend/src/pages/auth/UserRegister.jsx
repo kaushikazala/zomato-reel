@@ -29,7 +29,7 @@ const UserRegister = () => {
     },{
       withCredentials:true // to save token in cookies (from axios)
     })
-    navigate("/");
+    navigate("/user/login");
   }
 
   return (
@@ -121,7 +121,7 @@ const UserRegister = () => {
         {/* Footer */}
         <div className="auth-footer">
           Already have an account?{' '}
-          <Link to="/user/login">Sign In</Link>
+          <Link to="/user/login">Log In</Link>
         </div>
       </div>
     </div>

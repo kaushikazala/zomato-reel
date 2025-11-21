@@ -4,6 +4,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { API_URL } from '../../App'
 
+
 const API = import.meta.env.API_URL
 
 const CreateFood = () => {
@@ -79,8 +80,10 @@ const CreateFood = () => {
       formDataToSend.append('description', formData.description)
 
       await axios.post(`${API_URL}/api/food`, formDataToSend, {withCredentials:true})
+      
+  
       setSuccess('Food created successfully!')
-      navigate("/")
+       navigate("/");
       // const response = await fetch('/api/food/create', {
       //   method: 'POST',
       //   body: formDataToSend
@@ -112,6 +115,8 @@ const CreateFood = () => {
       videoPreview: null
     }))
   }
+
+
 
   return (
     <div className="create-food-container">

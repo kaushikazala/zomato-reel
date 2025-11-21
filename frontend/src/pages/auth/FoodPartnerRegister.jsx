@@ -35,7 +35,7 @@ const FoodPartnerRegister = () => {
     },{
       withCredentials:true 
     })
-    navigate("/create-food");
+    navigate("/food-partner/login");
   }
 
   return (
@@ -168,7 +168,7 @@ const FoodPartnerRegister = () => {
         {/* Footer */}
         <div className="auth-footer">
           Already registered?{' '}
-          <Link to="/food-partner/login">Sign In</Link>
+          <Link to="/food-partner/login"> Log In</Link>
         </div>
       </div>
     </div>

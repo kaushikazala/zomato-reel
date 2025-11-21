@@ -1,15 +1,42 @@
-import React, { use, useState } from 'react'
+import React, { use, useState, useEffect } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import '../../styles/auth.css'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../../App';
+import { useAuth } from '../../context/AuthContext';
 
 const API = import.meta.env.API_URL
 
 const UserLogin = () => {
 
   const navigate = useNavigate();
+  const { setUser } = useAuth();
+
+  useEffect(() => {
+    // Initialize Google Sign-In
+    if (window.google) {
+      google.accounts.id.initialize({
+        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+        callback: handleGoogleResponse
+      });
+    }
+  }, []);
+
+  const handleGoogleResponse = async (response) => {
+    try {
+      const res = await axios.post(`${API_URL}/api/auth/google/token`, {
+        idToken: response.credential,
+        role: 'user'
+      }, { withCredentials: true });
+
+      setUser(res.data);
+      navigate("/home");
+    } catch (err) {
+      alert(err.response?.data?.message || 'Google login failed');
+    }
+  };
+
    const handleSubmit = async (e) => {
     e.preventDefault();
       const formData = new FormData(e.target);
@@ -26,6 +53,7 @@ const UserLogin = () => {
       withCredentials:true 
     })
     console.log(response);
+    setUser(response.data);
     navigate("/home");
   }
   return (
@@ -74,14 +102,14 @@ const UserLogin = () => {
               />
               <label htmlFor="rememberMe">Remember me</label>
             </div>
-            <Link to="#" style={{ color: 'var(--primary-color)', textDecoration: 'none', fontSize: 'var(--font-size-sm)' }}>
+            <Link to="/forgot-password" style={{ color: 'var(--primary-color)', textDecoration: 'none', fontSize: 'var(--font-size-sm)' }}>
               Forgot password?
             </Link>
           </div>
 
           {/* Submit Button */}
           <button type="submit" className="submit-btn">
-            Sign In
+            Log In
           </button>
         </form>
 
@@ -90,9 +118,8 @@ const UserLogin = () => {
         </div>
 
         {/* Social Login */}
-        <button type="button" className="social-btn">
-          Continue with Google
-        </button>
+        <div id="g_id_onload" data-client_id={import.meta.env.VITE_GOOGLE_CLIENT_ID} data-callback="handleGoogleResponse"></div>
+        <div className="g_id_signin" data-type="standard" style={{ display: 'flex', justifyContent: 'center' }}></div>
 
         {/* Footer */}
         <div className="auth-footer">

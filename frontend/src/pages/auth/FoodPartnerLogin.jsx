@@ -1,13 +1,39 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import '../../styles/auth.css'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../../App';
+import { useAuth } from '../../context/AuthContext';
 
 
 const FoodPartnerLogin = () => {
   const navigate = useNavigate();
+  const { setUser } = useAuth();
+
+  useEffect(() => {
+    if (window.google) {
+      google.accounts.id.initialize({
+        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+        callback: handleGoogleResponse
+      });
+    }
+  }, []);
+
+  const handleGoogleResponse = async (response) => {
+    try {
+      const res = await axios.post(`${API_URL}/api/auth/google/token`, {
+        idToken: response.credential,
+        role: 'food-partner'
+      }, { withCredentials: true });
+
+      setUser(res.data);
+      navigate("/create-food");
+    } catch (err) {
+      alert(err.response?.data?.message || 'Google login failed');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -24,6 +50,7 @@ const FoodPartnerLogin = () => {
     },{
       withCredentials:true 
     })
+    setUser(response.data);
     navigate("/create-food");
   }
 
@@ -32,7 +59,7 @@ const FoodPartnerLogin = () => {
       <div className="auth-card">
         <div className="auth-header">
           <h1>Partner Login</h1>
-          <p>Sign in to your business account</p>
+          <p>Log in to your business account</p>
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -73,14 +100,14 @@ const FoodPartnerLogin = () => {
               />
               <label htmlFor="rememberMe">Remember me</label>
             </div>
-            <Link to="#" style={{ color: 'var(--primary-color)', textDecoration: 'none', fontSize: 'var(--font-size-sm)' }}>
+            <Link to="/forgot-password" style={{ color: 'var(--primary-color)', textDecoration: 'none', fontSize: 'var(--font-size-sm)' }}>
               Forgot password?
             </Link>
           </div>
 
           {/* Submit Button */}
           <button type="submit" className="submit-btn">
-            Sign In
+            Log In
           </button>
         </form>
 
@@ -89,9 +116,8 @@ const FoodPartnerLogin = () => {
         </div>
 
         {/* Social Login */}
-        <button type="button" className="social-btn">
-          Continue with Google
-        </button>
+        <div id="g_id_onload" data-client_id={import.meta.env.VITE_GOOGLE_CLIENT_ID} data-callback="handleGoogleResponse"></div>
+        <div className="g_id_signin" data-type="standard" style={{ display: 'flex', justifyContent: 'center' }}></div>
 
         {/* Footer */}
         <div className="auth-footer">
