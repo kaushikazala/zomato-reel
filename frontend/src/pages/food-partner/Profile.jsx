@@ -21,6 +21,7 @@ const Profile = () => {
         console.error('Error fetching business data:', error)
       })
    }, [id])
+   
 
     if (!profile) {
     return <p>Loading profile...</p>;  // prevents crash
