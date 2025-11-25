@@ -14,40 +14,10 @@ const UserLogin = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Initialize Google Sign-In when component loads
-    if (window.google) {
-      google.accounts.id.initialize({
-        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-        callback: handleGoogleResponse
-      });
-      google.accounts.id.renderButton(
-        document.getElementById('google-signin-button'),
-        { theme: 'outline', size: 'large' }
-      );
-    }
+    // No social auth: Google Sign-In removed
   }, []);
 
-  const handleGoogleResponse = async (response) => {
-    setLoading(true);
-    setError('');
-    try {
-      const res = await axios.post(
-        `${API_URL}/api/auth/google/token`,
-        {
-          idToken: response.credential,
-          role: 'user'
-        },
-        { withCredentials: true }
-      );
-      setUser(res.data);
-      navigate("/home");
-    } catch (err) {
-      setError(err.response?.data?.message || 'Google login failed');
-      console.error('Google login error:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Google login removed
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -139,8 +109,7 @@ const UserLogin = () => {
           <span>or</span>
         </div>
 
-        {/* Social Login - Google Sign-In Button */}
-        <div id="google-signin-button" style={{ display: 'flex', justifyContent: 'center' }}></div>
+        {/* Social Login removed */}
 
         {/* Footer */}
         <div className="auth-footer">
