@@ -22,7 +22,7 @@ const UserLogin = () => {
       });
       google.accounts.id.renderButton(
         document.getElementById('google-signin-button'),
-        { theme: 'outline', size: 'large', width: '100%' }
+        { theme: 'outline', size: 'large' }
       );
     }
   }, []);

@@ -16,8 +16,12 @@ export const AuthProvider = ({ children }) => {
         setUser(response.data);
       } catch (err) {
         // 401 is expected for unauthenticated users; silently treat as "not logged in"
-        if (err.response?.status !== 401) {
-          console.error('Error fetching user:', err);
+        // Only log network/server errors, not auth failures
+        if (err.response?.status !== 401 && err.code !== 'ERR_BAD_REQUEST') {
+          // Silently fail for 401 and bad requests - these are normal
+          if (!err.response || (err.response.status >= 500)) {
+            console.warn('Server error checking auth status:', err.message);
+          }
         }
         setUser(null);
       } finally {
