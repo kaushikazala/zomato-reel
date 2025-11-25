@@ -15,6 +15,10 @@ export const AuthProvider = ({ children }) => {
         const response = await axios.get(`${API_URL}/api/auth/me`, { withCredentials: true });
         setUser(response.data);
       } catch (err) {
+        // 401 is expected for unauthenticated users; silently treat as "not logged in"
+        if (err.response?.status !== 401) {
+          console.error('Error fetching user:', err);
+        }
         setUser(null);
       } finally {
         setLoading(false);
