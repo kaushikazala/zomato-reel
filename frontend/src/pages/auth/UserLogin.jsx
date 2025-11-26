@@ -37,7 +37,8 @@ const UserLogin = () => {
       }, {
         withCredentials: true 
       });
-      setUser(response.data);
+      // login response shape: { message, user }
+      setUser(response.data.user || null);
       navigate("/home");
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed. Please try again.');

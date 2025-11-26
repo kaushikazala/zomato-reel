@@ -13,7 +13,8 @@ export const AuthProvider = ({ children }) => {
     const fetchUser = async () => {
       try {
         const response = await axios.get(`${API_URL}/api/auth/me`, { withCredentials: true });
-        setUser(response.data);
+        // response shape: { role: string|null, profile: object|null }
+        setUser(response.data?.profile || null);
       } catch (err) {
         // 401 is expected for unauthenticated users; silently treat as "not logged in"
         // Only log network/server errors, not auth failures

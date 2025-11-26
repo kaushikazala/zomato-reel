@@ -37,7 +37,8 @@ const FoodPartnerLogin = () => {
       },{
         withCredentials:true 
       })
-      setUser(response.data);
+      // login response shape: { message, foodPartner }
+      setUser(response.data.foodPartner || null);
       navigate("/create-food");
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed. Please try again.');
