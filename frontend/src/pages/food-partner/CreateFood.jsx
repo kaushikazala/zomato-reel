@@ -4,9 +4,6 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { API_URL } from '../../App'
 
-
-const API = import.meta.env.API_URL
-
 const CreateFood = () => {
   const navigate = useNavigate()
   const [formData, setFormData] = useState({

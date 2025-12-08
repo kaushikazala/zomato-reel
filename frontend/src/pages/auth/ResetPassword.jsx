@@ -21,7 +21,7 @@ const ResetPassword = () => {
     e.preventDefault();
     if (password !== confirm) return setMessage('Passwords do not match');
     try {
-      await axios.post(`${API_URL}/api/auth/reset-password`, { token, newPassword: password, role: roleParam });
+      await axios.post(`${API_URL}/api/auth/reset-password`, { token, newPassword: password, role: roleParam }, { withCredentials: true });
       setMessage('Password reset successful. Redirecting to login...');
       setTimeout(() => navigate('/user/login'), 2500);
     } catch (err) {

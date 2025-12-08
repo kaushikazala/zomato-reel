@@ -105,10 +105,10 @@ const HomeGeneral = () => {
       // API call - adjust endpoint based on your backend structure
       const response = await axios.post(
         `${API_URL}/api/food/${videoId}/like`,
-        { liked: !currentState },
+        {},
         { withCredentials: true }
       )
-
+//cookies
       // Update with actual data from backend
       if (response.data) {
         setInteractions(prev => ({

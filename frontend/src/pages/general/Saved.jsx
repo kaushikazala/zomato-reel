@@ -76,7 +76,9 @@ const Saved = () => {
       try {
         setIsLoading(true)
         setError(null)
-        const response = await axios.get(`${API_URL}/food/save`, { withCredentials: true })
+        const response = await axios.get(`${API_URL}/api/food/save`, {
+          withCredentials: true
+        })
         setSavedVideos(response.data.savedFood || [])
       } catch (err) {
         console.error('Error fetching saved videos:', err)
@@ -143,11 +145,11 @@ const Saved = () => {
       }))
 
       // API call - toggle save
-      const res = await axios.post(`${API_URL}/food/save`, { foodId: videoId }, { withCredentials: true })
+      const res = await axios.post(`${API_URL}/api/food/save`, { foodId: videoId }, { withCredentials: true })
       // If backend responds that it's still saved, re-fetch to be consistent
       if (res && res.data && res.data.isSaved) {
         try {
-          const response = await axios.get(`${API_URL}/food/save`, { withCredentials: true })
+          const response = await axios.get(`${API_URL}/api/food/save`, { withCredentials: true })
           setSavedVideos(response.data.savedFood || [])
         } catch (fetchErr) {
           console.error('Error refetching saved videos:', fetchErr)
@@ -157,7 +159,7 @@ const Saved = () => {
       console.error('Error toggling bookmark:', err)
       // Revert optimistic update on error - refetch list
       try {
-        const response = await axios.get(`${API_URL}/food/save`, { withCredentials: true })
+        const response = await axios.get(`${API_URL}/api/food/save`, { withCredentials: true })
         setSavedVideos(response.data.savedFood || [])
       } catch (fetchErr) {
         console.error('Error refetching saved videos:', fetchErr)
