@@ -76,11 +76,11 @@ const CreateFood = () => {
       formDataToSend.append('name', formData.name)
       formDataToSend.append('description', formData.description)
 
-      await axios.post(`${API_URL}/api/food`, formDataToSend, {withCredentials:true})
-      
+     const response = await axios.post(`${API_URL}/api/food`, formDataToSend, {withCredentials:true})
+    const partnerId = response.data.foodItem.foodPartner;
   
       setSuccess('Food created successfully!')
-       navigate("/food-partner/:id");
+       navigate(`/food-partner/${partnerId}`);
       // const response = await fetch('/api/food/create', {
       //   method: 'POST',
       //   body: formDataToSend
