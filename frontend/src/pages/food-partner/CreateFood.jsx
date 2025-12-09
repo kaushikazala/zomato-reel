@@ -80,7 +80,7 @@ const CreateFood = () => {
       
   
       setSuccess('Food created successfully!')
-       navigate("/");
+       navigate("/food-partner/:id");
       // const response = await fetch('/api/food/create', {
       //   method: 'POST',
       //   body: formDataToSend

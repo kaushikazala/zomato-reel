@@ -10,8 +10,8 @@ const BottomNavigation = () => {
   return (
     <div className="bottom-nav">
       <Link 
-        to="/" 
-        className={`nav-item ${isActive('/') ? 'active' : ''}`}
+        to="/home" 
+        className={`nav-item ${isActive('/home') ? 'active' : ''}`}
         title="Home"
       >
         <svg viewBox="0 0 24 24" fill="currentColor">
