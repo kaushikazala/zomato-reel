@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "../../styles/auth.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { API_URL } from "../../App";
+import { API_URL } from "../../config/api";
 
 const UserLogin = () => {
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ const UserLogin = () => {
       const password = formData.get("password");
       const rememberMe = formData.get("rememberMe") === "on";
 
-      const response = await axios.post(
+      await axios.post(
         `${API_URL}/api/auth/user/login`,
         {
           email,

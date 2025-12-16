@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import '../../styles/auth.css'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
-import { API_URL } from '../../App';
+import { API_URL } from '../../config/api';
 
 
 
@@ -18,11 +18,9 @@ const UserRegister = () => {
 
     const fullName = formData.get('fullName');
     const email = formData.get('email');
-    const phone = formData.get('phone');
     const password = formData.get('password');
-    const agreeToTerms = formData.get('agreeToTerms') === 'on';
 
-   const response = await axios.post(`${API_URL}/api/auth/user/register`, {
+    await axios.post(`${API_URL}/api/auth/user/register`, {
       fullName,
       email,
       password,

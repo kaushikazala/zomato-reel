@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 import BottomNavigation from '../../components/BottomNavigation'
 import '../../styles/saved.css'
-import { API_URL } from '../../App'
+import { API_URL } from '../../config/api'
 
 
 const Saved = () => {

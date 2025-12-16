@@ -11,6 +11,9 @@ import CreateFood from '../pages/food-partner/CreateFood'
 import Profile from '../pages/food-partner/Profile'
 import ForgotPassword from '../pages/auth/ForgotPassword'
 import ResetPassword from '../pages/auth/ResetPassword'
+import OrderFood from '../pages/orders/OrderFood'
+import OrderStatus from '../pages/orders/OrderStatus'
+import RequireUser from '../components/RequireUser'
 
 
 
@@ -27,6 +30,25 @@ const AppRoutes = () => {
             <Route path="/saved" element={<Saved/>}/>
             <Route path="/create-food" element={<CreateFood />} />
             <Route path="/food-partner/:id" element={<Profile/>} />
+
+            {/* Ordering (user-only) */}
+            <Route
+              path="/food-partner/:id/order"
+              element={
+                <RequireUser>
+                  <OrderFood />
+                </RequireUser>
+              }
+            />
+            <Route
+              path="/orders/:orderId"
+              element={
+                <RequireUser>
+                  <OrderStatus />
+                </RequireUser>
+              }
+            />
+
             <Route path="/forgot-password" element={<ForgotPassword/>} />
             <Route path="/reset-password" element={<ResetPassword/>} />
         </Routes>

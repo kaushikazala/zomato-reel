@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../../styles/auth.css';
-import { API_URL } from '../../App';
+import { API_URL } from '../../config/api';
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();

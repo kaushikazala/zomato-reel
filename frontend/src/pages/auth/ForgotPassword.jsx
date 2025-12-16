@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import '../../styles/auth.css'
 import axios from 'axios'
-import { API_URL } from '../../App';
+import { API_URL } from '../../config/api';
 
 const ForgotPassword = () => {
-  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
