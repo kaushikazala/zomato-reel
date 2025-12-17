@@ -10,7 +10,8 @@ const CreateFood = () => {
     video: null,
     videoPreview: null,
     name: '',
-    description: ''
+    description: '',
+    price: ''
   })
 
   const [loading, setLoading] = useState(false)
@@ -69,12 +70,24 @@ const CreateFood = () => {
       return
     }
 
+    // Price is optional for now, but if provided it must be >= 0
+    if (formData.price !== '' && Number(formData.price) < 0) {
+      setError('Price must be 0 or more')
+      return
+    }
+
     setLoading(true)
     try {
       const formDataToSend = new FormData()
       formDataToSend.append('video', formData.video)
       formDataToSend.append('name', formData.name)
       formDataToSend.append('description', formData.description)
+
+      // Save as integer cents (e.g. 9.99 => 999)
+      if (formData.price !== '') {
+        const cents = Math.round(Number(formData.price) * 100)
+        formDataToSend.append('priceCents', String(cents))
+      }
 
      const response = await axios.post(`${API_URL}/api/food`, formDataToSend, {withCredentials:true})
     const partnerId = response.data.foodItem.foodPartner;
@@ -93,7 +106,8 @@ const CreateFood = () => {
         video: null,
         videoPreview: null,
         name: '',
-        description: ''
+        description: '',
+        price: ''
       })
       
       // Clear success message after 3 seconds
@@ -208,6 +222,24 @@ const CreateFood = () => {
             <div className="char-count">
               {formData.description.length}/300
             </div>
+          </div>
+
+          {/* Price (optional for now) */}
+          <div className="form-group">
+            <label htmlFor="price" className="form-label">
+              Price
+            </label>
+            <input
+              type="number"
+              id="price"
+              name="price"
+              value={formData.price}
+              onChange={handleInputChange}
+              placeholder="e.g. 9.99"
+              className="form-input"
+              min="0"
+              step="0.01"
+            />
           </div>
 
           {/* Submit Button */}
